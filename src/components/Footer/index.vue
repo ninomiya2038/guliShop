@@ -106,10 +106,7 @@
 
 <script>
 export default {
-  name: "Footers",
-  methods: {
-    
-  },
+  name: "Footer",
 };
 </script>
 
