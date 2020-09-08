@@ -315,7 +315,7 @@ export default {
           }
 
           &.item_on {
-            background-color: #ccc;
+            background-color: orange;
             .item-list {
               display: block;
             }
