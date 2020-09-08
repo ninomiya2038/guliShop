@@ -56,7 +56,13 @@ export default {
   },
   methods: {
     toSearch() {
-      this.$router.push({name:"search",params:{keyword:this.keyword}});
+      let location = {
+        name: "search",
+        params: { keyword: this.keyword || undefined },
+        query: {keyword2:this.keyword.toUpperCase()},
+      };
+
+      this.$router.push(location)
     }
   }
 };
