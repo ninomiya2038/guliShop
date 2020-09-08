@@ -51,10 +51,10 @@
                     <img src="./images/floor-1-b01.png" />
                   </div>
                   <div class="swiper-slide">
-                    <img src="./images/floor-1-b02.png" />
+                    <!-- <img src="./images/floor-1-b02.png" /> -->
                   </div>
                   <div class="swiper-slide">
-                    <img src="./images/floor-1-b03.png" />
+                    <!-- <img src="./images/floor-1-b03.png" /> -->
                   </div>
                 </div>
                 <!-- 如果需要分页器 -->
