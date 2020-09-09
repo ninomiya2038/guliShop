@@ -102,7 +102,7 @@ export default {
   name: "TypeNav",
   data() {
     return {
-      currentIndex: -1,//定义一个变量保存鼠标移入时元素的index 默认是-1 默认哪个也没进入
+      currentIndex: -1, //定义一个变量保存鼠标移入时元素的index 默认是-1 默认哪个也没进入
       isShow: true
     };
   },
@@ -113,7 +113,9 @@ export default {
     if (this.$route.path !== "/home") {
       this.isShow = false;
     }
-    // this.getCategoryList();//
+
+    //放在这里会发多次请求而请求的数据是一样的，挪到App当中发请求存数据（home/search都会发）
+    // this.getCategoryList();
   },
   methods: {
     // getCategoryList() {
@@ -144,10 +146,9 @@ export default {
     //移出全部商品分类外部的div，隐藏search的三级分类列表，home当中隐藏23级分类
     moveOutDiv() {
       this.currentIndex = -1;
-      if (this.$route.path !== "/home") {
-        this.isShow = false;
-      }
+      if (this.$route.path !== "/home") this.isShow = false;
     },
+
     toSearch(event) {
       let target = event.target; // 代表目标元素 有可能是a 也可能不是a
       let data = target.dataset; //dataset 拿的是元素身上以data-开头的所有属性和值组成的一个对象 只是里面的属性都改成小写了
@@ -267,13 +268,12 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
-
       &.show-enter {
         opacity: 0;
         height: 0;
       }
       &.show-enter-active {
-        transition: all .5s;
+        transition: all 0.5s;
       }
       &.show-enter-to {
         opacity: 1;
