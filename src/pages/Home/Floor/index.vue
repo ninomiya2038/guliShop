@@ -22,7 +22,7 @@
               <img :src="floor.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" ref="floorSwiper">
+              <!-- <div class="swiper-container" ref="floorSwiper">
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
@@ -31,14 +31,15 @@
                   >
                     <img :src="carouse.imgUrl" />
                   </div>
-                </div>
+                </div> -->
                 <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
+                <!-- <div class="swiper-pagination"></div> -->
 
                 <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
+                <!-- <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
-              </div>
+              </div> -->
+              <SliderLoop :bannerList="floor.carouselList"></SliderLoop>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -75,20 +76,46 @@ export default {
   name: "Floor",
   props: ["floor"], //声明接收属性
   mounted() {
-    new Swiper(this.$refs.floorSwiper, {
-      loop: true, // 循环模式选项
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination"
-      },
+    //为啥floor就能直接在mounted当中实例化我们的swiper，因为swiper在实例化的时候
+    //floor当中的结构已经形成，原因是floor当中没有发请求拿数据的过程，而是数据本身就
+    //已经存在
+    // new Swiper(this.$refs.floorSwiper, {
+    //   loop: true, // 循环模式选项
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: ".swiper-pagination"
+    //   },
+    //   // 如果需要前进后退按钮
+    //   navigation: {
+    //     nextEl: ".swiper-button-next",
+    //     prevEl: ".swiper-button-prev"
+    //   }
+    // });
+  },
+  // watch: {
+  //   floor: {
+  //     immediate: true,
+  //     handler() {
+  //       //这个回调是nextTick的回调，nextTick会等待页面dom最近一次循环更新结束之后才会执行它内部传递的回调
+  //        //updated也可以实现，但是并不是最近一次更新，而是所有的更新都会执行这个钩子（updated）
+  //       this.$nextTick(() => {
+  //         new Swiper(this.$refs.floorSwiper, {
+  //           loop: true, // 循环模式选项
+  //           // 如果需要分页器
+  //           pagination: {
+  //             el: ".swiper-pagination"
+  //           },
 
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
-      }
-    });
-  }
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: ".swiper-button-next",
+  //             prevEl: ".swiper-button-prev"
+  //           }
+  //         });
+  //       });
+  //     }
+  //   }
+  // }
 };
 </script>
 

@@ -4,19 +4,20 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" ref="bannerSwiper">
+        <!-- <div class="swiper-container" ref="bannerSwiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(banner, index) in bannerList" :key="banner.id">
               <img :src="banner.imgUrl" />
             </div>
-          </div>
+          </div> -->
           <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
+          <!-- <div class="swiper-pagination"></div> -->
 
           <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
+          <!-- <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
+        <SliderLoop :bannerList="bannerList"></SliderLoop>
       </div>
       <div class="right">
         <div class="news">
@@ -102,28 +103,31 @@
 </template>
 
 <script>
-import Swiper from 'swiper'
-import "swiper/css/swiper.min.css"
+import Swiper from "swiper";
+import "swiper/css/swiper.min.css";
 import { mapState } from "vuex";
 export default {
   name: "ListContainer",
   mounted() {
+    //1、把实例化swiper写在mounted当中，不能保证bannerList有数据，也就没法保证上面的轮播div结构形成
+    //2、即使数据能保证回来，放在mounted当中也不能保证结构形成，因为上面div通过for循环去创建也需要时间
     this.getBannerList();
-    setTimeout(() => {
-      new Swiper(this.$refs.bannerSwiper, {
-        loop: true, // 循环模式选项
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination"
-        },
+    //虽然说延迟定时器可以解决问题，但是不好
+    // setTimeout(() => {
+    //   new Swiper(this.$refs.bannerSwiper, {
+    //     loop: true, // 循环模式选项
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination"
+    //     },
 
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        }
-      });
-    }, 3000);
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev"
+    //     }
+    //   });
+    // }, 3000);
   },
   methods: {
     getBannerList() {
@@ -131,11 +135,37 @@ export default {
     }
   },
   computed: {
-    //不能用数组 因为banner不再总的state里面
+    //不能用数组 因为banner不在总的state里面
     ...mapState({
       bannerList: state => state.home.bannerList
     })
-  }
+  },
+  //一般监视:只能监视数组本身数据的改变，而不能监视数组内部对象内部属性的变化
+  // watch: {
+  //   bannerList: {
+  //     immediate: true,
+  //     //被监视的数据对象
+  //     handler() {
+  //       this.$nextTick(() => {
+  //         //这个回调是nextTick的回调，nextTick会等待页面dom最近一次循环更新结束之后才会执行它内部传递的回调
+  //        //updated也可以实现，但是并不是最近一次更新，而是所有的更新都会执行这个钩子（updated）
+  //         new Swiper(this.$refs.bannerSwiper, {
+  //           loop: true, // 循环模式选项
+  //           // 如果需要分页器
+  //           pagination: {
+  //             el: ".swiper-pagination"
+  //           },
+
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: ".swiper-button-next",
+  //             prevEl: ".swiper-button-prev"
+  //           }
+  //         });
+  //       });
+  //     }
+  //   }
+  // }
 };
 </script>
 
