@@ -4,20 +4,11 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container" ref="bannerSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div class="swiper-slide" v-for="(banner, index) in bannerList" :key="banner.id">
+              <img :src="banner.imgUrl" />
             </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -111,16 +102,40 @@
 </template>
 
 <script>
+import Swiper from 'swiper'
+import "swiper/css/swiper.min.css"
+import { mapState } from "vuex";
 export default {
   name: "ListContainer",
   mounted() {
-    this.getBannerList()
+    this.getBannerList();
+    setTimeout(() => {
+      new Swiper(this.$refs.bannerSwiper, {
+        loop: true, // 循环模式选项
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination"
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        }
+      });
+    }, 3000);
   },
   methods: {
-    getBannerList(){
-      this.$store.dispatch('getBannerList')
+    getBannerList() {
+      this.$store.dispatch("getBannerList");
     }
   },
+  computed: {
+    //不能用数组 因为banner不再总的state里面
+    ...mapState({
+      bannerList: state => state.home.bannerList
+    })
+  }
 };
 </script>
 
