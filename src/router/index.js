@@ -42,10 +42,10 @@ export default new VueRouter({
       path:"/search/:keyword?",
       component:Search,
       name:"search",
-      props(route){
-        //把路由对象接收到的参数，无论是什么参数，自己手动映射为路由组件的属性
-        return {keyword:route.params.keyword,keyword2:route.query.keyword2}
-      }
+      // props(route){
+      //   //把路由对象接收到的参数，无论是什么参数，自己手动映射为路由组件的属性
+      //   return {keyword:route.params.keyword,keyword2:route.query.keyword2}
+      // }
     },
     {
       path:"/login",
