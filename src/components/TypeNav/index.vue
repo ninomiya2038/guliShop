@@ -4,8 +4,8 @@
     <div class="container">
       <div @mouseleave="moveOutDiv" @mouseenter="moveInDiv">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort" v-show="isShow">
-          <transition name="show">
+        <transition name="show">
+          <div class="sort" v-show="isShow">
             <div class="all-sort-list2" @click="toSearch">
               <div
                 class="item"
@@ -77,8 +77,8 @@
                 </div>
               </div>
             </div>
-          </transition>
-        </div>
+          </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -273,7 +273,7 @@ export default {
         height: 0;
       }
       &.show-enter-active {
-        transition: all 2s;
+        transition: all .5s;
       }
       &.show-enter-to {
         opacity: 1;

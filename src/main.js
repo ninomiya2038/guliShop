@@ -3,6 +3,7 @@ import App from './App.vue'
 //引入
 import router from './router/index.js'
 import store from '@/store'
+import '@/mock/mockServer'
 
 Vue.config.productionTip = false
 //全局注册的各种组件
