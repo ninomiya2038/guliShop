@@ -102,7 +102,7 @@ export default {
   name: "TypeNav",
   data() {
     return {
-      currentIndex: -1,
+      currentIndex: -1,//定义一个变量保存鼠标移入时元素的index 默认是-1 默认哪个也没进入
       isShow: true
     };
   },
@@ -137,11 +137,11 @@ export default {
       { trailing: false } //拖延 默认是true 50毫秒后执行 有可能有bug移出后效果也一直在  false是不拖延 立即执行
     ),
     //{ trailing: false }不让函数在拖延之后执行 也就是在时间间隔内执行完这个函数 不写有可能
-    //移入
+    //移入到全部商品分类外部的div，显示三级分类列表
     moveInDiv() {
       this.isShow = true;
     },
-    //移出
+    //移出全部商品分类外部的div，隐藏search的三级分类列表，home当中隐藏23级分类
     moveOutDiv() {
       this.currentIndex = -1;
       if (this.$route.path !== "/home") {
