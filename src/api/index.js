@@ -19,7 +19,7 @@ export const reqBannerList=()=>{
     method:'get'
   })
 }
-export const reqFloorList=()=>{
+export const reqFloorList = ()=>{
   return mockAjax({
     url:'/floor',
     method:'get'

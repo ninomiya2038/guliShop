@@ -62,9 +62,10 @@ export default {
         // query: {keyword2:this.keyword.toUpperCase()},
       };
       //判断当前路由当中是不是有query参数 有就带上
-      let {query} = this.$route
+      let {query} = this.$route//从当前路由中解构出query
       if(query){
         location.query = query
+
       }
 
       this.$router.push(location)

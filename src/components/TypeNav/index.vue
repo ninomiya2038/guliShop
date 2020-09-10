@@ -177,9 +177,9 @@ export default {
         location.query = query;
 
         //判断当前路由当中是不是有params参数 有就带上
-        let { params } = this.$route;
-        if (params) {
-          location.params = params;
+        let {pramas} = this.$route
+        if(pramas){
+          location.params = params
         }
         this.$router.push(location);
       }
