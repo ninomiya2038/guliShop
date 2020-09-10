@@ -150,8 +150,9 @@ export default {
     },
 
     toSearch(event) {
-      let target = event.target; // 代表目标元素 有可能是a 也可能不是a
+      let target = event.target; // 定义一个变量获取目标元素 代表目标元素 有可能是a 也可能不是a
       let data = target.dataset; //dataset 拿的是元素身上以data-开头的所有属性和值组成的一个对象 只是里面的属性都改成小写了
+      // console.log(data);
       //解构data 拿出需要的属性
       let { categoryname, category1id, category2id, category3id } = data;
       if (categoryname) {
@@ -159,13 +160,13 @@ export default {
         //既然点的是a 那么一定会跳转，所以我们创建跳转的对象
         //定义一个对象 （用来赋值跳转）
         let location = {
-          //要跳转到的路由组件
-          name: "search"
+          name: "search" //要跳转到的路由组件
         };
         //创建query参数的对象，来收集整理query参数
         let query = {
           categoryName: categoryname
         };
+        //判断 并携带query参数
         if (category1id) {
           query.category1Id = category1id;
         } else if (category2id) {
@@ -175,11 +176,11 @@ export default {
         }
         //把query参数放到location当中
         location.query = query;
-
         //判断当前路由当中是不是有params参数 有就带上
-        let {pramas} = this.$route
-        if(pramas){
-          location.params = params
+        let { params } = this.$route; //从当前路由中解构出params
+        if (params) {
+          //如果有params参数 就带上
+          location.params = params;
         }
         this.$router.push(location);
       }

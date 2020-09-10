@@ -28,10 +28,6 @@ VueRouter.prototype.replace = function(location,onResolved,onRejected){
   }
 }
 
-
-
-
-
 export default new VueRouter({
   routes:[
     {
@@ -39,7 +35,7 @@ export default new VueRouter({
       component:Home
     },
     {
-      path:"/search/:keyword?",
+      path:"/search/:keyword?",//?代表这个params参数可传可不传
       component:Search,
       name:"search",
       // props(route){
@@ -65,6 +61,6 @@ export default new VueRouter({
       path:"/",
       redirect:"/home"
     }
-  ]
+  ],
 })
 //3、必须在vue当中去注入（使用）路由器对象 main.js当中去注入

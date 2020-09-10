@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-//引入
+//引入路由器组件
 import router from './router/index.js'
+//引入vuex对象组件
 import store from '@/store'
 import "@/mock/mockServer"//运行mockServer文件，让mock可以注册上接口
 
