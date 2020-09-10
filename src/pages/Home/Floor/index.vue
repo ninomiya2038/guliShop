@@ -70,8 +70,8 @@
 </template>
 
 <script>
-import Swiper from "swiper";
-import "swiper/css/swiper.min.css";
+// import Swiper from "swiper";
+// import "swiper/css/swiper.min.css";
 export default {
   name: "Floor",
   props: ["floor"], //声明接收属性

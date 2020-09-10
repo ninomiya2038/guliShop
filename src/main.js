@@ -6,11 +6,13 @@ import store from '@/store'
 import "@/mock/mockServer"//运行mockServer文件，让mock可以注册上接口
 
 Vue.config.productionTip = false
+
 //全局注册的各种组件
 import TypeNav from '@/components/TypeNav'//引入
 import SliderLoop from '@/components/SliderLoop'//引入
 Vue.component('TypeNav',TypeNav)//注册组件 本质给构造函数和一个名字进行关联
 Vue.component('SliderLoop',SliderLoop)//注册
+
 new Vue({
   el:'#app',
   render: h => h(App), //1、定义带注册  2、使用组件  3、渲染（依赖vue的一个loader去解析的vue-template-compiler）

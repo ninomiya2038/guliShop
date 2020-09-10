@@ -1,4 +1,5 @@
 <template>
+<!-- 轮播图公共组件，因为在多个组件中使用，所以要在main.js中全局注册 -->
   <div class="swiper-container" ref="bannerSwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="(banner, index) in bannerList" :key="banner.id">
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+//引入swiper插件及css样式
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 export default {

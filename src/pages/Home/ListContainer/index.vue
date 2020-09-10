@@ -103,8 +103,8 @@
 </template>
 
 <script>
-import Swiper from "swiper";
-import "swiper/css/swiper.min.css";
+// import Swiper from "swiper";
+// import "swiper/css/swiper.min.css";
 import { mapState } from "vuex";
 export default {
   name: "ListContainer",
