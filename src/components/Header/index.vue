@@ -54,6 +54,9 @@ export default {
       keyword:'',
     }
   },
+  mounted() {
+    this.$bus.$on('clearKeyword',this.clearKeyword)//第二个参数是个函数 所以只写函数名 不写() 如果写了 参数就变成函数的返回值 就不对了
+  },
   methods: {
     toSearch() {
       let location = {
@@ -69,6 +72,9 @@ export default {
       }
 
       this.$router.push(location)
+    },
+    clearKeyword(){
+      this.keyword = ''
     }
   }
 };

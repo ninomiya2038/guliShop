@@ -25,3 +25,16 @@ export const reqFloorList = ()=>{
     method:'get'
   })
 }
+//请求获取search页商品列表数据 /api/list
+//请求方式post
+//data 请求体参数
+export const reqGoodsListInfo = (searchParams)=>{
+  return Ajax({
+    url:'/list',
+    method:'post',
+    data:searchParams//必须是对象 代表的是搜索参数 如果里面什么都没有 只是一个{}也没问题
+    //返回的是所有的商品信息
+    //如果搜索参数中有东西 那返回的就是按照这些参数搜索到的商品信息
+    //但是不能不传参数
+  })
+}
