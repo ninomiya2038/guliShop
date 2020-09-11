@@ -97,7 +97,7 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 // import _ from "lodash"; //体积过大
-import throttle from "lodash/throttle";
+import throttle from "lodash/throttle";//节流
 export default {
   name: "TypeNav",
   data() {
@@ -130,12 +130,13 @@ export default {
     // moveIn: function(index){
     //   this.currentIndex = index
     // },
+    //节流
     moveIn: throttle(
       function(index) {
         //console.log(index);
         this.currentIndex = index;
       },
-      50,
+      50,//触发时间间隔
       { trailing: false } //拖延 默认是true 50毫秒后执行 有可能有bug移出后效果也一直在  false是不拖延 立即执行
     ),
     //{ trailing: false }不让函数在拖延之后执行 也就是在时间间隔内执行完这个函数 不写有可能
