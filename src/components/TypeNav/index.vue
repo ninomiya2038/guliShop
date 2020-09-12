@@ -97,7 +97,7 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 // import _ from "lodash"; //体积过大
-import throttle from "lodash/throttle";//节流
+import throttle from "lodash/throttle"; //节流
 export default {
   name: "TypeNav",
   data() {
@@ -136,7 +136,7 @@ export default {
         //console.log(index);
         this.currentIndex = index;
       },
-      50,//触发时间间隔
+      50, //触发时间间隔
       { trailing: false } //拖延 默认是true 50毫秒后执行 有可能有bug移出后效果也一直在  false是不拖延 立即执行
     ),
     //{ trailing: false }不让函数在拖延之后执行 也就是在时间间隔内执行完这个函数 不写有可能
@@ -183,7 +183,12 @@ export default {
           //如果有params参数 就带上
           location.params = params;
         }
-        this.$router.push(location);
+        //判断当前路由路径是什么，如果是home，那么我们就push，如果不是home那就replace  
+        if (this.$route.path !== "/home") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
       }
     }
   },

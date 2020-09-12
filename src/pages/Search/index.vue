@@ -32,15 +32,30 @@
         </div>
 
         <!--selector-->
-        <SearchSelector @searchForTrademark="searchForTrademark" @searchForProps="searchForProps"/>
+        <!-- 自定义事件 只适用于子向父传递数据 -->
+        <SearchSelector @searchForTrademark="searchForTrademark" @searchForProps="searchForProps" />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 数据决定了页面的显式
+                1、数据要清楚
+                2、背景色谁有根据数据当中排序标志来决定
+                3、背景色谁有，那么箭头谁就有
+                  图标用什么  iconfont
+                  图标显示的时候是向上还是向下根据数据的排序类型决定
+                -->
+                <li :class="{active:sortFlag ==='1'}">
+                  <a href="javascript:;" @click="sortGoods('1')">
+                    综合
+                    <i
+                      v-if="sortFlag === '1'"
+                      class="iconfont"
+                      :class="{iconup:sortType ==='asc',icondown:sortType ==='desc'}"
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -51,11 +66,15 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:sortFlag ==='2'}">
+                  <a href="javascript:;" @click="sortGoods('2')">
+                    价格
+                    <i
+                      v-if="sortFlag === '2'"
+                      class="iconfont"
+                      :class="{iconup:sortType ==='asc',icondown:sortType ==='desc'}"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -157,8 +176,10 @@ export default {
         props: [], //按照平台属性搜索的参数
         trademark: "", //按照品牌搜索的参数
 
-        //代表的是用户发送请求默认的参数  默认获取第几页  默认排序规则是什么  默认每页个数
-        order: "1:desc",
+        // 代表的是用户发送请求默认的参数  默认获取第几页  默认排序规则是什么  默认每页个数
+        //排序标志 1和2        1代表是综合排序  2代表价格排序
+        //排序类型 desc和asc   desc代表降序   asc升序
+        order: "2:desc",
         pageNo: 1,
         pageSize: 2
       }
@@ -191,87 +212,105 @@ export default {
     // });
     // this.searchParams = searchParams;
     // this.getGoodsListInfo();
-    this.handlerSearchParams()
+    this.handlerSearchParams();
   },
   mounted() {
     this.getGoodsListInfo();
   },
   methods: {
+    //发送请求 获取商品数据列表
     getGoodsListInfo() {
       //需要传递搜索参数 是一个对象
       this.$store.dispatch("getGoodsListInfo", this.searchParams);
     },
     //请求前处理params和query参数
-    handlerSearchParams(){
+    handlerSearchParams() {
       //我们可以从路由中获取所需要的query参数和params参数
       let {
-          category1Id,
-          category2Id,
-          category3Id,
-          categoryName
-        } = this.$route.query;
-        let { keyword } = this.$route.params;
-        let searchParams = {
-          ...this.searchParams,
-          category1Id,
-          category2Id,
-          category3Id,
-          categoryName,
-          keyword
-        };
-        //传递的参数如果是undefined代表没传吗，如果传递的参数是''，其实是真的有参数，但是其实没必要传递空串的参数
-        //把参数是空串的全部过滤掉
-        Object.keys(searchParams).forEach(item => {
-          if (searchParams[item] === "") {
-            delete searchParams[item];
-          }
-        });
-        this.searchParams = searchParams;
+        category1Id,
+        category2Id,
+        category3Id,
+        categoryName
+      } = this.$route.query;
+      let { keyword } = this.$route.params;
+      let searchParams = {
+        ...this.searchParams,
+        category1Id,
+        category2Id,
+        category3Id,
+        categoryName,
+        keyword
+      };
+      //传递的参数如果是undefined代表没传吗，如果传递的参数是''，其实是真的有参数，但是其实没必要传递空串的参数
+      //把参数是空串的全部过滤掉
+      Object.keys(searchParams).forEach(item => {
+        if (searchParams[item] === "") {
+          delete searchParams[item];
+        }
+      });
+      this.searchParams = searchParams;
     },
     //点击面包屑当中的关闭× categoryName，删除参数当中的categoryName 重新发请求
-    removeCategoryName(){
-      this.searchParams.categoryName = undefined
+    removeCategoryName() {
+      this.searchParams.categoryName = undefined;
       // this.getGoodsListInfo();
       //虽然可以发请求，但是路径当中的参数不会被删除，因为路由当中参数是没变化的，所以我们必须
       //自己手动跳转路由，修改路由当中的参数
-      this.$router.push({name:'search',params:this.$route.params})
-
+      this.$router.replace({ name: "search", params: this.$route.params });
     },
     //点击面包屑当中的关闭× keyword 删除参数当中的keyword 重新发请求
-    removeKeyword(){
-      this.searchParams.keyword = undefined
-      //通知header组件把输入框当中的keyword清空
-      this.$bus.$emit('clearKeyword')
+    removeKeyword() {
+      this.searchParams.keyword = undefined;
+      //通知header组件把输入框当中的keyword清空 //全局事件总线（组件间通信）分发事件
+      this.$bus.$emit("clearKeyword");
       // this.getGoodsListInfo();
-      this.$router.push({name:'search',query:this.$route.query})
+      this.$router.replace({ name: "search", query: this.$route.query });
     },
-    removeTrademark(){
-      this.searchParams.trademark = undefined
+    //删除面包屑当中的品牌
+    removeTrademark() {
+      this.searchParams.trademark = undefined;
       this.getGoodsListInfo();
     },
     //子向父传递品牌数据，按照品牌搜索
-    searchForTrademark(trademark){
+    searchForTrademark(trademark) {
       //'tmId:tmName'
       //根据品牌搜索一定要参考文档去看参数的结构
-      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
       this.getGoodsListInfo();
     },
     //子向父传递属性数据，按照属性搜索
-    searchForProps(attr,attrValue){
+    searchForProps(attr, attrValue) {
       // 属性ID:属性值:属性名
-      let prop = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      let prop = `${attr.attrId}:${attrValue}:${attr.attrName}`;
       //加入之前判断数据当中是否存在，如果已经存在就不需要再次加入并且发请求了
-      let repeat = this.searchParams.props.some(item=>item === prop)
-      if(repeat) return
+      let repeat = this.searchParams.props.some(item => item === prop);
+      if (repeat) return;
       // 或者直接判断
       // if (this.searchParams.props.some(item=>item === prop)) {
       //   return
       // }
-      this.searchParams.props.push(prop)
+      this.searchParams.props.push(prop);
       this.getGoodsListInfo();
     },
-    removeProp(index){
-      this.searchParams.props.splice(index,1)
+    //删除面包屑当中的属性
+    removeProp(index) {
+      this.searchParams.props.splice(index, 1);
+      this.getGoodsListInfo();
+    },
+    //点击综合和价格进行排序
+    sortGoods(sortFlag) {
+      //拿到原本数据当中的排序标志和排序类型
+      let originSortFlag = this.sortFlag;
+      let originSortType = this.sortType;
+      let newOrder = "";
+      if (sortFlag === originSortFlag) {
+        newOrder = `${originSortFlag}:${
+          originSortType === "asc" ? "desc" : "asc"
+        }`;
+      } else {
+        newOrder = `${sortFlag}:desc`;
+      }
+      this.searchParams.order = newOrder;
       this.getGoodsListInfo();
     }
   },
@@ -283,8 +322,14 @@ export default {
     // attrsList(){
     //   return this.$store.getters.attrsList
     // },
-    ...mapGetters(["goodsList"]) //父组件search当中只需要拿到商品列表去展示
+    ...mapGetters(["goodsList"]), //父组件search当中只需要拿到商品列表去展示
     //attrsList  trademarkList 两个数据是子组件需要展示的，到子组件当中去获取，可以避免组件通信
+    sortFlag() {
+      return this.searchParams.order.split(":")[0];
+    },
+    sortType() {
+      return this.searchParams.order.split(":")[1];
+    }
   },
   // computed:mapGetters(['attrsList','goodsList','trademarkList'])
   watch: {
@@ -292,7 +337,7 @@ export default {
     //因为mounted在路由组件当中不切换的情况下只会执行一次
     $route: {
       handler(newVal, oldVal) {
-        this.handlerSearchParams()
+        this.handlerSearchParams();
         this.getGoodsListInfo();
       }
     }

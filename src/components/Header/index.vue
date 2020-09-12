@@ -37,7 +37,12 @@
         </h1>
         <div class="searchArea">
           <form action="###" class="searchForm">
-            <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
+            <input
+              type="text"
+              id="autocomplete"
+              class="input-error input-xxlarge"
+              v-model="keyword"
+            />
             <button class="sui-btn btn-xlarge btn-danger" type="button" @click="toSearch">搜索</button>
           </form>
         </div>
@@ -51,30 +56,35 @@ export default {
   name: "Header",
   data() {
     return {
-      keyword:'',
-    }
+      keyword: ""
+    };
   },
   mounted() {
-    this.$bus.$on('clearKeyword',this.clearKeyword)//第二个参数是个函数 所以只写函数名 不写() 如果写了 参数就变成函数的返回值 就不对了
+    //全局事件总线（组件间通信）接收事件
+    // 事件的回调函数在谁里面 谁就接收事件
+    this.$bus.$on("clearKeyword", this.clearKeyword); //第二个参数是个函数 所以只写函数名 不写() 如果写了 参数就变成函数的返回值 就不对了
   },
   methods: {
     toSearch() {
       let location = {
         name: "search",
-        params: { keyword: this.keyword || undefined },
+        params: { keyword: this.keyword || undefined }
         // query: {keyword2:this.keyword.toUpperCase()},
       };
       //判断当前路由当中是不是有query参数 有就带上
-      let {query} = this.$route//从当前路由中解构出query
-      if(query){
-        location.query = query
-
+      let { query } = this.$route; //从当前路由中解构出query
+      if (query) {
+        location.query = query;
       }
-
-      this.$router.push(location)
+      //判断当前路由路径是什么，如果是home，那么我们就push，如果不是home那就replace
+      if (this.$route.path !== "/home") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
-    clearKeyword(){
-      this.keyword = ''
+    clearKeyword() {
+      this.keyword = "";
     }
   }
 };
