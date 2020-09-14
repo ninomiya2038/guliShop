@@ -1,22 +1,21 @@
 <template>
   <div class="pagination">
     <button :disabled="currentPageNum === 1" @click="$emit('changePageNum',currentPageNum - 1)">上一页</button>
-    <button v-if="startEnd.start > 1" @click="$emit('changePageNum',1)">1</button>
-    <button v-if="startEnd.start > 2">···</button>
+    <button v-if="startEnd.start >1" @click="$emit('changePageNum',1)">1</button>
+    <button v-if="startEnd.start >2">···</button>
 
     <!-- vfor和vif如果一起使用vfor优先级高于vif -->
     <button
       v-for="(page) in startEnd.end"
       :key="page"
-      v-if="page >= startEnd.start"
+      v-if="page >=startEnd.start"
       :class="{active:currentPageNum === page}"
       @click="$emit('changePageNum',page)"
     >{{page}}</button>
-
-    <button v-if="startEnd.end < totalPageNum - 1">···</button>
-    <button v-if="startEnd.end < totalPageNum" @click="$emit('changePageNum',totalPageNum)">{{totalPageNum}}</button>
+    <button v-if="startEnd.end <totalPageNum-1">···</button>
+    <button v-if="startEnd.end <totalPageNum" @click="$emit('changePageNum',totalPageNum)">{{totalPageNum}}</button>
     <button :disabled="currentPageNum === totalPageNum" @click="$emit('changePageNum',currentPageNum + 1)">下一页</button>
-    <button style="margin-left: 30px">共 {{total}} 条</button>
+    <button>共{{total}}条</button>
   </div>
 </template>
 
@@ -30,20 +29,19 @@ export default {
   props: {
     currentPageNum: {
       type: Number,
-      default: 1,
+      default: 1
     },
     pageSize: Number,
     total: Number,
     continueNum: {
       type: Number,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     totalPageNum() {
       return Math.ceil(this.total / this.pageSize);
     },
-
     startEnd() {
       //要想计算连续页的起始位置和结束位置
       //和三个数据又关系  当前页码  连续数量  总页数
@@ -57,14 +55,12 @@ export default {
         //首先计算正常情况
         start = currentPageNum - Math.floor(continueNum / 2);
         end = currentPageNum + Math.floor(continueNum / 2);
-
         if (start <= 1) {
           //左侧边界修正
           disNum = 1 - start; //指的是算出的start和1之间的差值，为了后面去修正算出来的start和end
           start += disNum;
           end += disNum;
         }
-
         if (end >= totalPageNum) {
           //右侧边界修正
           disNum = end - totalPageNum;
@@ -72,10 +68,9 @@ export default {
           end -= disNum;
         }
       }
-
       return { start, end };
-    },
-  },
+    }
+  }
 };
 </script>
 

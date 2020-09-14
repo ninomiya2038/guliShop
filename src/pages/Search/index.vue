@@ -84,9 +84,12 @@
               <li class="yui3-u-1-5" v-for="(goods, index) in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <!-- <a href="item.html" target="_blank">
                       <img :src="goods.defaultImg" />
-                    </a>
+                    </a> -->
+                    <router-link :to="'/detail/'+goods.id">
+                      <img :src="goods.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -95,11 +98,12 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
+                    <!-- <a
                       target="_blank"
                       href="item.html"
                       title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                    >{{goods.title}}</a>
+                    >{{goods.title}}</a> -->
+                    <router-link :to="'/detail/'+goods.id">{{goods.title}}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">
@@ -119,39 +123,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted">
-                  <span>...</span>
-                </li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div>
-                <span>共10页&nbsp;</span>
-              </div>
-            </div>
-          </div>
+          <!-- 父组件需要给分页子组件传递的四个数据 -->
+          <Pagination
+            :currentPageNum="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="goodsListInfo.total"
+            :continueNum="5"
+            @changePageNum="changePageNum"
+          ></Pagination>
         </div>
       </div>
     </div>
@@ -159,7 +138,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
@@ -181,7 +160,7 @@ export default {
         //排序类型 desc和asc   desc代表降序   asc升序
         order: "2:desc",
         pageNo: 1,
-        pageSize: 2
+        pageSize: 1,
       }
     };
   },
@@ -252,6 +231,7 @@ export default {
     },
     //点击面包屑当中的关闭× categoryName，删除参数当中的categoryName 重新发请求
     removeCategoryName() {
+      this.searchParams.pageNo =1
       this.searchParams.categoryName = undefined;
       // this.getGoodsListInfo();
       //虽然可以发请求，但是路径当中的参数不会被删除，因为路由当中参数是没变化的，所以我们必须
@@ -260,6 +240,7 @@ export default {
     },
     //点击面包屑当中的关闭× keyword 删除参数当中的keyword 重新发请求
     removeKeyword() {
+      this.searchParams.pageNo =1
       this.searchParams.keyword = undefined;
       //通知header组件把输入框当中的keyword清空 //全局事件总线（组件间通信）分发事件
       this.$bus.$emit("clearKeyword");
@@ -268,6 +249,7 @@ export default {
     },
     //删除面包屑当中的品牌
     removeTrademark() {
+      this.searchParams.pageNo =1
       this.searchParams.trademark = undefined;
       this.getGoodsListInfo();
     },
@@ -275,6 +257,7 @@ export default {
     searchForTrademark(trademark) {
       //'tmId:tmName'
       //根据品牌搜索一定要参考文档去看参数的结构
+      this.searchParams.pageNo = 1
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
       this.getGoodsListInfo();
     },
@@ -289,11 +272,13 @@ export default {
       // if (this.searchParams.props.some(item=>item === prop)) {
       //   return
       // }
+      this.searchParams.pageNo =1
       this.searchParams.props.push(prop);
       this.getGoodsListInfo();
     },
     //删除面包屑当中的属性
     removeProp(index) {
+      this.searchParams.pageNo =1
       this.searchParams.props.splice(index, 1);
       this.getGoodsListInfo();
     },
@@ -310,8 +295,14 @@ export default {
       } else {
         newOrder = `${sortFlag}:desc`;
       }
+      //把新的排序规则更新然后重新发请求
+      this.searchParams.pageNo =1
       this.searchParams.order = newOrder;
       this.getGoodsListInfo();
+    },
+    changePageNum(page){
+      this.searchParams.pageNo = page
+      this.getGoodsListInfo()
     }
   },
 
@@ -322,6 +313,9 @@ export default {
     // attrsList(){
     //   return this.$store.getters.attrsList
     // },
+    ...mapState({
+      goodsListInfo: state => state.search.goodsListInfo
+    }),
     ...mapGetters(["goodsList"]), //父组件search当中只需要拿到商品列表去展示
     //attrsList  trademarkList 两个数据是子组件需要展示的，到子组件当中去获取，可以避免组件通信
     sortFlag() {

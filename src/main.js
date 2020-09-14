@@ -11,8 +11,10 @@ Vue.config.productionTip = false
 //全局注册的各种组件
 import TypeNav from '@/components/TypeNav'//引入
 import SliderLoop from '@/components/SliderLoop'//引入
+import Pagination from '@/components/Pagination'//引入
 Vue.component('TypeNav',TypeNav)//注册组件 本质给构造函数和一个名字进行关联
 Vue.component('SliderLoop',SliderLoop)//注册
+Vue.component('Pagination',Pagination)//注册
 
 new Vue({
   beforeCreate() {
