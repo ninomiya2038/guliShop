@@ -1,6 +1,7 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css' 
+import store from '@/store'
 // 1\配置基础路径和超时限制
 const instance = axios.create({
   baseURL:'/api',
@@ -14,6 +15,11 @@ instance.interceptors.request.use(config=>{
   NProgress.start() //添加进度条功能
   //2、我们可以对请求报文进行处理
   // config.headers.token = '1211242354'
+  //请求拦截器当中为每一次ajax请求都添加用户临时标识
+  let userTempId = store.state.user.userTempId
+  if(userTempId){
+    config.headers.userTempId = userTempId
+  }
   return config
 })
 //和响应拦截器 ： 1、可以添加功能  2、可以处理响应报文信息
