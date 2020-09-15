@@ -27,6 +27,7 @@ VueRouter.prototype.replace = function(location,onResolved,onRejected){
 
 export default new VueRouter({
   routes,
+  //跳转路由时 总是到最上面
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   }

@@ -1,17 +1,63 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="event"></div>
+    <img :src="defaultImg.imgUrl" />
+    <div class="event" @mousemove="move"></div>
     <div class="big">
-      <img src="../images/s1.png" />
+      <img :src="defaultImg.imgUrl" ref="bigImg"/>
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
 <script>
   export default {
     name: "Zoom",
+    props:['skuImageList'],
+    data() {
+      return {
+        defaultIndex:0
+      }
+    },
+    mounted() {
+      //给事件总线绑定改变下标的事件
+      this.$bus.$on('changeDefaultIndex',this.changeDefaultIndex)
+    },
+    methods: {
+      changeDefaultIndex(index){
+        //改变了下标，defaultIndex被改变，默认显示的图片就会改变
+        this.defaultIndex = index
+      },
+      move(event){
+        let mask = this.$refs.mask
+        let mouseX = event.offsetX
+        let mouseY = event.offsetY
+        let maskX = mouseX - mask.offsetWidth /2
+        let maskY = mouseY - mask.offsetHeight /2
+        if(maskX<0){
+          maskX =0
+        }else if(maskX > mask.offsetWidth){
+          maskX = mask.offsetWidth
+        }
+        if(maskY<0){
+          maskY =0
+        }else if(maskY > mask.offsetHeight){
+          maskY = mask.offsetHeight
+        }
+
+        //设置遮罩的位置
+        mask.style.left = maskX +'px'
+        mask.style.top = maskY +'px'
+        //设置大图的位置
+        let bigImg = this.$refs.bigImg
+        bigImg.style.left = -2*maskX+'px'
+        bigImg.style.top = -2*maskY+'px'
+      }
+    },
+    computed: {
+      defaultImg(){
+        return this.skuImageList[this.defaultIndex] ||{}
+      }
+    },
   }
 </script>
 

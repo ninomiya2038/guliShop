@@ -6,35 +6,51 @@ import mockAjax from '@/ajax/mockAjax'
 ///api/product/getBaseCategoryList 请求地址
 //GET：请求方式
 //参数：无
-export const reqCategoryList =()=>{
+export const reqCategoryList = () => {
   return Ajax({
-    url:'/product/getBaseCategoryList',
-    method:'get'
+    url: '/product/getBaseCategoryList',
+    method: 'get'
   })
 }
 //请求获取mock的banner和floor的数据
-export const reqBannerList=()=>{
+export const reqBannerList = () => {
   return mockAjax({
-    url:'/banner',
-    method:'get'
+    url: '/banner',
+    method: 'get'
   })
 }
-export const reqFloorList = ()=>{
+export const reqFloorList = () => {
   return mockAjax({
-    url:'/floor',
-    method:'get'
+    url: '/floor',
+    method: 'get'
   })
 }
 //请求获取search页商品列表数据 /api/list
 //请求方式post
 //data 请求体参数
-export const reqGoodsListInfo = (searchParams)=>{
+export const reqGoodsListInfo = (searchParams) => {
   return Ajax({
-    url:'/list',
-    method:'post',
-    data:searchParams//必须是对象 代表的是搜索参数 如果里面什么都没有 只是一个{}也没问题
+    url: '/list',
+    method: 'post',
+    data: searchParams //必须是对象 代表的是搜索参数 如果里面什么都没有 只是一个{}也没问题
     //返回的是所有的商品信息
     //如果搜索参数中有东西 那返回的就是按照这些参数搜索到的商品信息
     //但是不能不传参数
+  })
+}
+// 请求获取商品详情数据
+///api/item/{ skuId }    get
+export const reqGoodsDetailInfo = (skuId) => {
+  return Ajax({
+    url: `/item/${skuId}`,
+    method: 'get',
+  })
+}
+//请求添加购物车（修改购物车数量） /api/cart/addToCart/{ skuId }/{ skuNum }
+//post
+export const reqAddOrUpdateShopCart = (skuId,skuNum)=>{
+  return Ajax({
+    url: `/cart/addToCart/${ skuId }/${ skuNum }`,
+    method: 'post',
   })
 }
