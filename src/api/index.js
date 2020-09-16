@@ -77,3 +77,62 @@ export const reqDeleteCart = (skuId) => {
     method:'delete'
   })
 }
+
+//请求注册用户  /api/user/passport/register  post  
+
+export const reqUserRegister = (userInfo) => {
+  return Ajax({
+    url:'/user/passport/register',
+    method:'post',
+    data:userInfo
+  })
+}
+
+//请求登录用户  /api/user/passport/login  post 
+
+export const reqUserLogin = (userInfo) => {
+  return Ajax({
+    url:'/user/passport/login',
+    method:'post',
+    data:userInfo
+  })
+}
+
+//请求退出登录 /api/user/passport/logout get
+
+export const reqUserLogout = () => {
+  return Ajax({
+    url:'/user/passport/logout',
+    method:'get',
+  })
+}
+
+//请求获取订单交易信息 /api/order/auth/trade  get
+
+export const reqTradeInfo = () => {
+  return Ajax({
+    url:'/order/auth/trade',
+    method:'get'
+  })
+}
+
+
+//请求提交订单（创建订单）  /api/order/auth/submitOrder?tradeNo={tradeNo}    post
+
+
+export const reqSubmitOrder = (tradeNo,tradeInfo) => {
+  return Ajax({
+    url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    method:'post',
+    data:tradeInfo
+  })
+}
+
+
+//请求获取支付信息 /api/payment/weixin/createNative/{orderId}  get
+export const reqPayInfo = (orderId) => {
+  return Ajax({
+    url:`/payment/weixin/createNative/${orderId}`,
+    method:'get'
+  })
+}

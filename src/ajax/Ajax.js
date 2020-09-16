@@ -20,6 +20,10 @@ instance.interceptors.request.use(config=>{
   if(userTempId){
     config.headers.userTempId = userTempId
   }
+  let token = store.state.user.userInfo.token
+  if(token){
+    config.headers.token = token
+  }
   return config
 })
 //和响应拦截器 ： 1、可以添加功能  2、可以处理响应报文信息
